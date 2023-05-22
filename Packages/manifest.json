@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "com.unity.burst": "1.8.4",
+    "com.unity.memoryprofiler": "1.1.0-pre.1"
+  }
+}
