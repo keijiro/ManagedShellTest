@@ -14,10 +14,11 @@ public static class TextureDataGenerator
         using var data = new NativeArray<Color32>
           (w * h, Allocator.Temp, NativeArrayOptions.UninitializedMemory);
 
-        var c1 = Color.HSVToRGB(Random.value, 0.8f, 1);
-        var c2 = Color.HSVToRGB(Random.value, 0.8f, 1);
-        var c3 = Color.HSVToRGB(Random.value, 0.8f, 1);
-        var c4 = Color.HSVToRGB(Random.value, 0.8f, 1);
+        var hue = Random.value;
+        var c1 = Color.HSVToRGB(hue, Random.value, 1);
+        var c2 = Color.HSVToRGB(hue, Random.value, 1);
+        var c3 = Color.HSVToRGB(hue, Random.value, 1);
+        var c4 = Color.HSVToRGB(hue, Random.value, 1);
 
         FillData(data, w, h, c1, c2, c3, c4);
 
