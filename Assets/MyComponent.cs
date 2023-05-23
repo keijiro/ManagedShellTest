@@ -19,5 +19,5 @@ public sealed class MyComponent : MonoBehaviour
         GetComponent<Renderer>().material.mainTexture = _texture;
     }
 
-    //void OnDestroy() => Destroy(_texture);
+    // _texture should be released in OnDestroy!
 }

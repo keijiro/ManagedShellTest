@@ -3,20 +3,20 @@ using System.Collections.Generic;
 
 public sealed class Spawner : MonoBehaviour
 {
-    [SerializeField] MyComponent _prefab = null;
-    [SerializeField] int _spawnCount = 100;
+    public MyComponent _prefab = null;
 
     List<MyComponent> _spawned = new List<MyComponent>();
 
     async void Start()
     {
-        for (var i = 0; i < _spawnCount; i++)
+        for (var i = 0; i < 256; i++)
             _spawned.Add(Instantiate(_prefab));
 
         await Awaitable.WaitForSecondsAsync(3);
 
-        foreach (var o in _spawned) Destroy(o.gameObject);
+        foreach (var o in _spawned)
+            Destroy(o.gameObject);
 
-        //Resources.UnloadUnusedAssets();
+        // _spawned should be cleared!
     }
 }
