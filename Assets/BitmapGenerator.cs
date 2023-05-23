@@ -5,14 +5,11 @@ using System;
 using Random = UnityEngine.Random;
 
 [BurstCompile]
-public static class TextureDataGenerator
+public static class BitmapGenerator
 {
-    public static void LoadRandomPattern(Texture2D tex)
+    public static byte[] GenerateRandom(int width, int height)
     {
-        var (w, h) = (tex.width, tex.height);
-
-        using var data = new NativeArray<Color32>
-          (w * h, Allocator.Temp, NativeArrayOptions.UninitializedMemory);
+        var bitmap = new byte[4 * width * height];
 
         var hue = Random.value;
         var c1 = Color.HSVToRGB(hue, Random.value, 1);
@@ -20,18 +17,20 @@ public static class TextureDataGenerator
         var c3 = Color.HSVToRGB(hue, Random.value, 1);
         var c4 = Color.HSVToRGB(hue, Random.value, 1);
 
-        FillData(data, w, h, c1, c2, c3, c4);
+        unsafe
+        {
+            fixed (byte* p = &bitmap[0])
+                FillData(p, width, height, c1, c2, c3, c4);
+        }
 
-        tex.LoadRawTextureData(data);
-        tex.Apply();
+        return bitmap;
     }
 
     [BurstCompile]
-    static void FillData
-      (in NativeArray<Color32> data, int w, int h,
+    unsafe static void FillData
+      (byte* bitmap, int w, int h,
        in Color c1, in Color c2, in Color c3, in Color c4)
     {
-        var span = data.AsSpan();
         var idx = 0;
         for (var y = 0; y < h; y++)
         {
@@ -41,7 +40,11 @@ public static class TextureDataGenerator
             for (var x = 0; x < w; x++)
             {
                 var u = (float)x / w;
-                span[idx++] = Color.Lerp(c5, c6, u);
+                var c = (Color32)Color.Lerp(c5, c6, u);
+                bitmap[idx++] = c.r;
+                bitmap[idx++] = c.g;
+                bitmap[idx++] = c.b;
+                bitmap[idx++] = 0xff;
             }
         }
     }

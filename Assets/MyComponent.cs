@@ -2,6 +2,7 @@ using UnityEngine;
 
 public sealed class MyComponent : MonoBehaviour
 {
+    byte[] _bitmap;
     Texture2D _texture;
 
     void Start()
@@ -9,8 +10,11 @@ public sealed class MyComponent : MonoBehaviour
         transform.localRotation = Random.rotation;
         transform.localPosition = Random.insideUnitSphere * 5;
 
+        _bitmap = BitmapGenerator.GenerateRandom(512, 512);
         _texture = new Texture2D(512, 512, TextureFormat.RGBA32, false);
-        TextureDataGenerator.LoadRandomPattern(_texture);
+
+        _texture.LoadRawTextureData(_bitmap);
+        _texture.Apply();
 
         GetComponent<Renderer>().material.mainTexture = _texture;
     }
